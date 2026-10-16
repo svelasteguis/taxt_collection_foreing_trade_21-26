@@ -1,4 +1,4 @@
-// Cración de la tabla
+-- Cración de la tabla
 CREATE TABLE year_2021 (
 	NOM_DISTRITO INT, 
 	NOM_TRIBUTO VARCHAR(150), 
