@@ -49,7 +49,7 @@ ORDER BY total_tributo_pagado DESC
 LIMIT 3;
 
 -- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Rank the top 3 regulatory infractions andt their corresponding tax collection
+-- Rank the top 3 regulatory infractions and their corresponding tax collection
 -- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 SELECT nom_tipo_sancion, 
 	COUNT(*) AS num_registros,
