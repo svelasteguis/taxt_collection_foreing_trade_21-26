@@ -7,3 +7,6 @@
    ============================================================================ */
  
 CREATE DATABASE foreign_trade_senae;
+
+-- Connection with the Database created
+\ c foreign_trade_senae
