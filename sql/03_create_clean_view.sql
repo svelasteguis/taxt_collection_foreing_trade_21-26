@@ -6,6 +6,7 @@
              - Amounts are cast to numeric(20,2). Amounts appear to be in USD (Ecuador is dollarized); confirm in the SENAE data dictionary.
              - Some source text contains corrupted characters ('??'). They are kept as-is because the original character cannot be recovered.
              - Exact duplicate rows are kept: without a unique key they cannot be told apart from legitimate identical payments.
+			 - The 'nom_estado_liquidacion' column was not used because it is not meaningful for the data, as all of the rows are paid.
    Author:   Sebastián Velasteguí
    ============================================================================ */
 
