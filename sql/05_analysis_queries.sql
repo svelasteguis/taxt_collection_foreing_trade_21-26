@@ -74,12 +74,47 @@ LIMIT 3;
              (b) top 5 individual months by collection
    Finding:  <Write one sentence here after running the query.>
    ================================================================================================================================================================*/
+-- (a) monthly total with year-over-year change
+SELECT payment_year, payment_month,
+	SUM(amount_paid)																				AS total_amount_paid,
+	LAG(SUM(amount_paid), 12) OVER(ORDER BY payment_year, payment_month)							AS total_paid_previous_year,
+	SUM(amount_paid) - LAG(SUM(amount_paid), 12) OVER(ORDER BY payment_year, payment_month)		AS diff_vs_prior_year
+FROM clean_data
+GROUP BY payment_year, payment_month
+ORDER BY payment_year, payment_month;
+
+-- (b) top 5 individual months by collection
+SELECT payment_year, payment_month,
+	SUM(amount_paid) AS total_amount_paid
+FROM clean_data
+GROUP BY payment_year, payment_month
+ORDER BY total_amount_paid DESC
+LIMIT 5;
 
 /* ================================================================================================================================================================
    Question 4: Which calendar months are structurally the strongest?
    Output:   Top 3 months by average share of the annual collection.
    Finding:  <Write one sentence here after running the query.>
    ================================================================================================================================================================*/
+WITH monthly AS(
+	SELECT payment_year, payment_month, 
+		SUM(amount_paid)	AS total_amout_paid
+	FROM clean_data
+	WHERE payment_year < (SELECT MAX(payment_year) FROM clean_data)
+	GROUP BY payment_year, payment_month
+),
+	shares AS(
+	SELECT payment_month,
+		total_amout_paid / SUM(total_amout_paid) OVER(PARTITION BY payment_year)AS share_of_year
+	FROM monthly
+	)
+SELECT payment_month,
+	TO_CHAR(MAKE_DATE(2000, payment_month, 1), 'Mon') 	AS month_name,
+	ROUND(100 * AVG(share_of_year), 2) 				AS avg_pct_of_year
+FROM shares
+GROUP BY payment_month
+ORDER BY avg_pct_of_year DESC
+LIMIT 3;
 
 /* ================================================================================================================================================================
    Question 5: How much revenue comes from sanctions, and which types and infractions matter most?
