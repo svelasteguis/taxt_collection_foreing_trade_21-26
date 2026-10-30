@@ -123,6 +123,32 @@ LIMIT 3;
              (c) top 3 infractions by amount
    Finding:  <Write one sentence here after running the query.>
    ================================================================================================================================================================*/
+-- (a) sanctions as a share of total revenue
+SELECT 
+	ROUND( 100 * SUM(amount_paid) FILTER(WHERE sanction_type_name <> 'NO APLICA') 
+	/ SUM(amount_paid), 2)
+FROM clean_data
+
+--  (b) top 3 sanction types by amount
+SELECT sanction_type_name,
+	COUNT(*) AS record_count,
+	SUM(amount_paid) AS total_amount_paid	
+FROM clean_data
+WHERE sanction_type_name <> 'NO APLICA'
+GROUP BY sanction_type_name
+ORDER BY total_amount_paid DESC
+LIMIT 3;
+
+-- (c) top 3 infractions by amount
+SELECT infraction_code, 
+	LEFT(infraction_name, 110), 
+	COUNT(*) AS record_count,
+	SUM(amount_paid) AS total_amount_paid	
+FROM clean_data
+WHERE infraction_name <> 'NO APLICA'
+GROUP BY infraction_code, infraction_name
+ORDER BY total_amount_paid DESC
+LIMIT 3;
 
 /* ================================================================================================================================================================
    Question 6: How many times larger is Guayaquil Maritime collection than Guayaquil Air, and is that ratio stable over time?
