@@ -7,7 +7,10 @@
    Question 1: Which customs districts collect the most, and how concentrated is revenue?
    Output:   (a) top 5 districts with share and cumulative share of the total
              (b) top 3 districts per year, to see whether concentration changes
-   Finding:  <Write one sentence here after running the query.>
+   Finding:  (a) Guayaquil Maritime is the highest-recollecting district with nearly two-thirds of the total share (64.74%). The top five districts collect 96.45% 
+				 of the total
+   Finding:	 (b) The same three districts ranked in the top three every year: Guayaquil Maritime was first throughout, Manta was second in 2021-2023 and 2026, 
+				 and Quito was second in 2024 and 2025.
    ================================================================================================================================================================*/
 -- (a) top 5 districts with share and cumulative share of the total
 WITH total_paid_district AS(	
@@ -18,8 +21,8 @@ WITH total_paid_district AS(
 	ORDER BY total_paid DESC
 )
 SELECT district_name, total_paid,
-	ROUND(100 * total_paid / SUM(total_paid) OVER(), 2) AS share_of_the_total,
-	ROUND(100 * SUM(total_paid) OVER(ORDER BY total_paid DESC) / SUM(total_paid) OVER(), 2)
+	ROUND(100 * total_paid / SUM(total_paid) OVER(), 2) 										AS share_of_the_total,
+	ROUND(100 * SUM(total_paid) OVER(ORDER BY total_paid DESC) / SUM(total_paid) OVER(), 2)		AS acomulative_share
 FROM total_paid_district
 LIMIT 5;
 
@@ -39,12 +42,13 @@ ranking AS (
 SELECT payment_year, district_name, total_paid, concentration_year
 FROM ranking
 WHERE ranking_year <= 3
-ORDER BY payment_year, ranking_year;
+ORDER BY payment_year, ranking_year
 
 /* ================================================================================================================================================================
    Question 2: Which payment channels dominate in the highest-collecting district?
    Output:   Top 3 payment channels with their share of that district's revenue.
-   Finding:  <Write one sentence here after running the query.>
+   Finding:  The hisghest-collecting district is Guayaquil - Maritime and the top 3 payment channels in this district are Internet with a share of 42.88%. 
+			 Other devices with 31.06% and last one, Ventanilla with 24.17%
    ================================================================================================================================================================*/
 WITH highest_collection_distric AS (	
 	SELECT district_name
@@ -61,7 +65,7 @@ WITH highest_collection_distric AS (
 )
 SELECT c.district_name, c.payment_chanel_name, 
 	SUM(amount_paid),
-	ROUND(SUM(c.amount_paid) / SUM(SUM(c.amount_paid)) OVER(PARTITION BY c.district_name), 2) AS share_revenue
+	ROUND(100 * SUM(c.amount_paid) / SUM(SUM(c.amount_paid)) OVER(PARTITION BY c.district_name), 2) AS share_revenue
 FROM clean_data c
 JOIN highest_collection_distric h ON c.district_name = h.district_name
 GROUP BY c.district_name, c.payment_chanel_name
@@ -155,3 +159,11 @@ LIMIT 3;
    Output:   One row per year with both totals and their ratio.
    Finding:  <Write one sentence here after running the query.>
    ================================================================================================================================================================*/
+SELECT payment_year,
+	SUM(amount_paid) FILTER(WHERE district_name = 'GUAYAQUIL - MARITIMO')		AS maritime_paid,
+	SUM(amount_paid) FILTER(WHERE district_name = 'GUAYAQUIL - AEREO')			AS air_paid,
+	ROUND(SUM(amount_paid) FILTER(WHERE district_name = 'GUAYAQUIL - MARITIMO') / 
+		NULLIF(SUM(amount_paid) FILTER(WHERE district_name = 'GUAYAQUIL - AEREO'), 0), 2) 		AS maritime_to_air_ratio
+FROM clean_data
+GROUP BY payment_year
+ORDER BY payment_year;
