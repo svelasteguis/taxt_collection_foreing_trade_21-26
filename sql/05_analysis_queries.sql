@@ -47,7 +47,7 @@ ORDER BY payment_year, ranking_year;
 /* ================================================================================================================================================================
    Question 2: Which payment channels dominate in the highest-collecting district?
    Output:   Top 3 payment channels with their share of that district's revenue.
-   Finding:  The hisghest-collecting district is Guayaquil - Maritime and the top 3 payment channels in this district are Internet with a share of 42.88%. 
+   Finding:  The hisghest-collecting district is Guayaquil - Maritime and the top 3 payment channels in this district are Internet with a share of 41.88%. 
 			 Other devices with 31.06% and last one, Ventanilla with 24.17%
    ================================================================================================================================================================*/
 WITH highest_collection_distric AS (	
@@ -131,8 +131,8 @@ LIMIT 3;
              (c) top 3 infractions by amount
    Finding:  (a) This income just represents 0.17% from sanctions.
    Finding:	 (b) The 3 highest-collecting sactions are 'Falta Reglamentaria', 'Contravención' and 'Contravención - Contrabando'. The first of them are registered 
-				 most of the 33 thousand times an recollect 18303208.14 USD
-   Finding:	 (c) The 3 highest-collecting infraction are "COPCI ART. 193 LITERAL", "COPCI ART. 190 LITERAL B" and 
+				 most of the 34 thousand times an recollect 18303208.14 USD
+   Finding:	 (c) The 3 highest-collecting infraction are "COPCI ART. 193 LITERAL d", "COPCI ART. 190 LITERAL B" and 
 				 "LEY S/N R.O. 525-5S COPCI ART. 190, LIT N; COIP ART. 299, NUM 3; COIP DISP. GEN. 4TA-ART. 299 COIP, NUMERAL 3" The first of them are registered 
 				 most of the 13 thousand times an recollect 8011393.02 USD
    ================================================================================================================================================================*/
