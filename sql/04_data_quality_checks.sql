@@ -8,7 +8,7 @@
  
 /* ================================================================================================================================================================
    Output:   Row count per year. Expected: 2021-2025 full years; 2026 partial.
-   Finding:  
+   Finding:  There is not a notable difference throughout the yaers. 2021: 169249, 2022:187790, 2023:193116, 2024:205188, 2025:212793, 2026: 159680 until September
    ================================================================================================================================================================ */
 SELECT payment_year, 
 	COUNT(*) 
@@ -17,16 +17,16 @@ GROUP BY payment_year;
  
 /* ================================================================================================================================================================
    Output:   Accounting identity: credit note + cash = total paid.
-   Finding:  
+   Finding:  In 2025 there is a difference of USD 0.02 in the other years there is no difference
    ================================================================================================================================================================ */
 SELECT payment_year, 
-	SUM(ABS(amount_credit_notes + amount_cash - amount_paid)) 
+	SUM(ABS(amount_credit_notes + amount_cash - amount_paid)) AS total_paid
 FROM clean_data
 GROUP BY payment_year;
  
 /* ================================================================================================================================================================
    Output:   Payment dates outside the expected window.
-   Finding:  
+   Finding:  There is no payments outside the expected windows
    ================================================================================================================================================================ */
 SELECT COUNT(*) AS out_of_range
 FROM clean_data
@@ -35,66 +35,38 @@ WHERE payment_date < '2021-01-01'
 
 /* ================================================================================================================================================================
    Output:   Reversals (negative amounts): count and net effect on revenue.
-   Finding:  
+   Finding:  There are 7 negative amounts which have a total of USD -1390.21
    ================================================================================================================================================================ */
 SELECT 
 	COUNT(*)			    AS row_negative_values, 
-	SUM(amount_paid)	AS sum_negative_values
+	SUM(amount_paid)		AS sum_negative_values
 FROM clean_data
 WHERE amount_paid < 0;
  
 /* ================================================================================================================================================================
    Output:   Rows with corrupted characters ('??') in the infraction text.
-   Finding:  
+   Finding:  There are two columns with corrupted characters, nom_tributo columns with 62479 and nom_infraccion with 5376 rows
    ================================================================================================================================================================ */
-WITH nom_tributo AS(
-	SELECT COUNT(*)             AS corrupted_nom_tributo
-	FROM raw_data
-	WHERE nom_tributo LIKE '%??%'
-),
-nom_tipo_liquidacion AS(
-	SELECT COUNT(*)             AS corrupted_nom_tipo_liquidacion
-	FROM raw_data
-	WHERE nom_tipo_liquidacion LIKE '%??%'
-),
-nom_estado_liquidacion AS(
-	SELECT COUNT(*)             AS corrupted_nom_estado_liquidacion
-	FROM raw_data
-	WHERE nom_estado_liquidacion LIKE '%??%'
-),
-tipos_doc_referencia AS(
-	SELECT COUNT(*)             AS corrupted_tipos_doc_referencia
-	FROM raw_data
-	WHERE tipos_doc_referencia LIKE '%??%'
-),
-nom_infraccion AS(
-	SELECT COUNT(*)             AS corrupted_nom_infraccion
-	FROM raw_data
-	WHERE nom_infraccion LIKE '%??%'
-),
-nom_tipo_sancion AS(
-	SELECT COUNT(*)             AS corrupted_nom_tipo_sancion
-	FROM raw_data
-	WHERE nom_tipo_sancion LIKE '%??%'
-),
-canal_pago AS(
-	SELECT COUNT(*)             AS corrupted_canal_pago
-	FROM raw_data
-	WHERE canal_pago LIKE '%??%'
-)
-SELECT t.corrupted_nom_tributo, l.corrupted_nom_tipo_liquidacion, e.corrupted_nom_estado_liquidacion, d.corrupted_tipos_doc_referencia, i.corrupted_nom_infraccion, s.corrupted_nom_tipo_sancion, c.corrupted_canal_pago
-FROM nom_tributo t, nom_tipo_liquidacion l, nom_estado_liquidacion e, tipos_doc_referencia d, nom_infraccion i, nom_tipo_sancion s, canal_pago c;
+SELECT 
+	COUNT(*) FILTER(WHERE nom_tributo LIKE '%??%') 					AS corrupted_nom_tributo,
+	COUNT(*) FILTER(WHERE nom_tipo_liquidacion LIKE '%??%') 		AS corrupted_nom_tipo_liquidacion,
+	COUNT(*) FILTER(WHERE nom_estado_liquidacion LIKE '%??%') 		AS corrupted_nom_estado_liquidacion,
+	COUNT(*) FILTER(WHERE tipos_doc_referencia LIKE '%??%') 		AS corrupted_tipos_doc_referencia,
+	COUNT(*) FILTER(WHERE nom_infraccion LIKE '%??%') 				AS corrupted_nom_infraccion,
+	COUNT(*) FILTER(WHERE nom_tipo_sancion LIKE '%??%') 			AS corrupted_nom_tipo_sancion,
+	COUNT(*) FILTER(WHERE canal_pago LIKE '%??%') 					AS corrupted_canal_pago
+FROM raw_data;
 
 /* ================================================================================================================================================================
    Output:   Columns with a single distinct value carry no information.
-   Finding:  
+   Finding:  The unique column with an unique value is nom_estado_liquidacion
    ================================================================================================================================================================ */
 SELECT COUNT(DISTINCT nom_estado_liquidacion) AS distinr_statuses
 FROM raw_data;
  
 /* ================================================================================================================================================================
    Output:   Share of revenue with no recorded payment channel
-   Finding:  
+   Finding:  The 1.29% of the payments don't have a channel that means USD 302093091.48
    ================================================================================================================================================================ */
 WITH total_amount AS(
   	SELECT SUM(amount_paid) AS sum_total_amount
@@ -105,5 +77,6 @@ WITH total_amount AS(
   	FROM clean_data
   	WHERE payment_chanel_name = 'SIN CANAL'
 ) 
-  SELECT t.sum_total_amount, s.sum_sin_canal_payment, ROUND(s.sum_sin_canal_payment/t.sum_total_amount,4)
-  FROM total_amount t, sin_canal_payment s;
+SELECT t.sum_total_amount, s.sum_sin_canal_payment,  
+	ROUND(100 * s.sum_sin_canal_payment/t.sum_total_amount,2) AS share_sin_canal_payment
+FROM total_amount t, sin_canal_payment s;
