@@ -18,12 +18,12 @@ WITH total_paid_district AS(
 		SUM(amount_paid) AS total_paid
 	FROM clean_data
 	GROUP BY district_name
-	ORDER BY total_paid DESC
 )
 SELECT district_name, total_paid,
-	ROUND(100 * total_paid / SUM(total_paid) OVER(), 2) 										AS share_of_the_total,
+	ROUND(100 * total_paid / SUM(total_paid) OVER(), 2) 											AS share_of_the_total,
 	ROUND(100 * SUM(total_paid) OVER(ORDER BY total_paid DESC) / SUM(total_paid) OVER(), 2)		AS acomulative_share
 FROM total_paid_district
+ORDER BY total_paid DESC
 LIMIT 5;
 
 -- (b) top 3 districts per year, to see whether concentration changes
@@ -60,12 +60,13 @@ WITH highest_collection_distric AS (
 				SELECT SUM(amount_paid) AS total_by_district
 				FROM clean_data
 				GROUP BY district_name
-		)
+		) sub
 	)
 )
 SELECT c.district_name, c.payment_chanel_name, 
-	SUM(amount_paid),
-	ROUND(100 * SUM(c.amount_paid) / SUM(SUM(c.amount_paid)) OVER(PARTITION BY c.district_name), 2) AS share_revenue
+	SUM(amount_paid)													AS total_amount_paid,
+	ROUND(100 * SUM(c.amount_paid) 
+	/ SUM(SUM(c.amount_paid)) OVER(PARTITION BY c.district_name), 2) 	AS share_revenue
 FROM clean_data c
 JOIN highest_collection_distric h ON c.district_name = h.district_name
 GROUP BY c.district_name, c.payment_chanel_name
@@ -139,7 +140,7 @@ LIMIT 3;
 -- (a) sanctions as a share of total revenue
 SELECT 
 	ROUND( 100 * SUM(amount_paid) FILTER(WHERE sanction_type_name <> 'NO APLICA') 
-	/ SUM(amount_paid), 2)
+	/ SUM(amount_paid), 2) AS sanction_share_revenue
 FROM clean_data;
 
 --  (b) top 3 sanction types by amount
