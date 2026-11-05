@@ -21,7 +21,7 @@ WITH total_paid_district AS(
 )
 SELECT district_name, total_paid,
 	ROUND(100 * total_paid / SUM(total_paid) OVER(), 2) 											AS share_of_the_total,
-	ROUND(100 * SUM(total_paid) OVER(ORDER BY total_paid DESC) / SUM(total_paid) OVER(), 2)		AS acomulative_share
+	ROUND(100 * SUM(total_paid) OVER(ORDER BY total_paid DESC) / SUM(total_paid) OVER(), 2)			AS acumulative_share
 FROM total_paid_district
 ORDER BY total_paid DESC
 LIMIT 5;
@@ -50,7 +50,7 @@ ORDER BY payment_year, ranking_year;
    Finding:  The hisghest-collecting district is Guayaquil - Maritime and the top 3 payment channels in this district are Internet with a share of 41.88%. 
 			 Other devices with 31.06% and last one, Ventanilla with 24.17%
    ================================================================================================================================================================*/
-WITH highest_collection_distric AS (	
+WITH highest_collection_district AS (	
 	SELECT district_name
 	FROM clean_data
 	GROUP BY district_name
@@ -63,13 +63,13 @@ WITH highest_collection_distric AS (
 		) sub
 	)
 )
-SELECT c.district_name, c.payment_chanel_name, 
+SELECT c.district_name, c.payment_channel_name, 
 	SUM(amount_paid)													AS total_amount_paid,
 	ROUND(100 * SUM(c.amount_paid) 
 	/ SUM(SUM(c.amount_paid)) OVER(PARTITION BY c.district_name), 2) 	AS share_revenue
 FROM clean_data c
-JOIN highest_collection_distric h ON c.district_name = h.district_name
-GROUP BY c.district_name, c.payment_chanel_name
+JOIN highest_collection_district h ON c.district_name = h.district_name
+GROUP BY c.district_name, c.payment_channel_name
 ORDER BY share_revenue DESC
 LIMIT 3;
 
@@ -77,10 +77,10 @@ LIMIT 3;
    Question 3: How does monthly collection evolve, and which months were the best?
    Output:   (a) monthly total with year-over-year change
              (b) top 5 individual months by collection
-   Finding:  (a) The highest-collecting months are August and September in the most of the years. The collecting amoount tends to increase throughout the years, 
+   Finding:  (a) The highest-collecting months are August and September in the most of the years. The collecting amount tends to increase throughout the years, 
 				 except 2023, year in which the amount reduce in almost all months
-   Finding:	 (b) The individual months from 2021 to partian 2026 with most collectig amount were April, 2026; October, 2025; July, 2026; December, 2025; August, 2026.
-				 The highest-collecting month had 4.75 hundred million of USD and the lowest of the gruop had 4.39 hundred million
+   Finding:	 (b) The individual months from 2021 to partial 2026 with most collecting amount were April, 2026; October, 2025; July, 2026; December, 2025; August, 2026.
+				 The highest-collecting month had 4.75 hundred million of USD and the lowest of the group had 4.39 hundred million
    ================================================================================================================================================================*/
 -- (a) monthly total with year-over-year change
 SELECT payment_year, payment_month,
@@ -107,14 +107,14 @@ LIMIT 5;
    ================================================================================================================================================================*/
 WITH monthly AS(
 	SELECT payment_year, payment_month, 
-		SUM(amount_paid)	AS total_amout_paid
+		SUM(amount_paid)	AS total_amount_paid
 	FROM clean_data
 	WHERE payment_year < (SELECT MAX(payment_year) FROM clean_data)
 	GROUP BY payment_year, payment_month
 ),
 	shares AS(
 	SELECT payment_month,
-		total_amout_paid / SUM(total_amout_paid) OVER(PARTITION BY payment_year)AS share_of_year
+		total_amount_paid / SUM(total_amount_paid) OVER(PARTITION BY payment_year)AS share_of_year
 	FROM monthly
 	)
 SELECT payment_month,
@@ -131,11 +131,11 @@ LIMIT 3;
              (b) top 3 sanction types by amount
              (c) top 3 infractions by amount
    Finding:  (a) This income just represents 0.17% from sanctions.
-   Finding:	 (b) The 3 highest-collecting sactions are 'Falta Reglamentaria', 'Contravención' and 'Contravención - Contrabando'. The first of them are registered 
-				 most of the 34 thousand times an recollect 18303208.14 USD
+   Finding:	 (b) The 3 highest-collecting sanctions are 'Falta Reglamentaria', 'Contravención' and 'Contravención - Contrabando'. The first of them are registered 
+				 most of the 34 thousand times and recollect 18303208.14 USD
    Finding:	 (c) The 3 highest-collecting infraction are "COPCI ART. 193 LITERAL d", "COPCI ART. 190 LITERAL B" and 
 				 "LEY S/N R.O. 525-5S COPCI ART. 190, LIT N; COIP ART. 299, NUM 3; COIP DISP. GEN. 4TA-ART. 299 COIP, NUMERAL 3" The first of them are registered 
-				 most of the 13 thousand times an recollect 8011393.02 USD
+				 most of the 13 thousand times and recollect 8011393.02 USD
    ================================================================================================================================================================*/
 -- (a) sanctions as a share of total revenue
 SELECT 
@@ -167,7 +167,7 @@ LIMIT 3;
 /* ================================================================================================================================================================
    Question 6: How many times larger is Guayaquil Maritime collection than Guayaquil Air, and is that ratio stable over time?
    Output:   One row per year with both totals and their ratio.
-   Finding:  In 2021 tha maritime to air ratio was 16.08 times and in 2026 until september is 17.11 times. So the variation is not big.
+   Finding:  In 2021 the maritime to air ratio was 16.08 times and in 2026 until September is 17.11 times. So the variation is not big.
    ================================================================================================================================================================*/
 SELECT payment_year,
 	SUM(amount_paid) FILTER(WHERE district_name = 'GUAYAQUIL - MARITIMO')						AS maritime_paid,
