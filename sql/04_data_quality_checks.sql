@@ -74,7 +74,7 @@ WITH total_amount AS(
   sin_canal_payment AS (
   	SELECT SUM(amount_paid) AS sum_sin_canal_payment
   	FROM clean_data
-  	WHERE payment_chanel_name = 'SIN CANAL'
+  	WHERE payment_channel_name = 'SIN CANAL'
 ) 
 SELECT t.sum_total_amount, s.sum_sin_canal_payment,  
 	ROUND(100 * s.sum_sin_canal_payment/t.sum_total_amount,2) AS share_sin_canal_payment
