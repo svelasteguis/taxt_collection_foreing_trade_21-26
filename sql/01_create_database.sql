@@ -8,5 +8,5 @@
  
 CREATE DATABASE foreign_trade_senae;
 
--- Connection with the Database created
+-- Connection to the Database created above
 \c foreign_trade_senae
