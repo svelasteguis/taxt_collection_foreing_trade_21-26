@@ -28,8 +28,8 @@ SELECT
 	REGEXP_REPLACE(TRIM(nom_infraccion), '^\d+\s*-\s*', '') 			AS infraction_name,
 	NULLIF(SUBSTRING(TRIM(nom_tipo_sancion) FROM '^\d+'), '')			AS sanction_type_code,
 	REGEXP_REPLACE(TRIM(nom_tipo_sancion), '^\d+\s*-\s*', '')			AS sanction_type_name,
-	NULLIF(SUBSTRING(TRIM(canal_pago) FROM '^\d+'), '')					AS payment_channel_code,
-	REGEXP_REPLACE(TRIM(canal_pago), '^\d+\s*-\s*', '')					AS payment_channel_name,
+	NULLIF(SUBSTRING(TRIM(canal_pago) FROM '(\d+)\s*'), '')				AS payment_channel_code,
+	REGEXP_REPLACE(TRIM(canal_pago), '^[0-9]+-\s', '')					AS payment_channel_name,
 	valor_total_tributo_en_nc :: numeric(20,2)							AS amount_credit_notes, 	-- numeric type is used to keep the acurrete value
 	valor_total_tributo_en_efectivo :: numeric(20,2)					AS amount_cash,
 	valor_total_tributo_pagado :: numeric(20,2)							AS amount_paid				-- Cash plus credit note
