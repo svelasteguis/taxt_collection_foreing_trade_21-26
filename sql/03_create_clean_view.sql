@@ -3,7 +3,7 @@
    Purpose:  Build the typed, English-named view used by every analysis query.
    Output:   clean_data view
    Notes:    - Codes are split from labels (e.g. '07-IVA' -> '07' and 'IVA').
-             - Amounts are cast to numeric(20,2). Amounts appear to be in USD (Ecuador is dollarized); The SENAE data dictionary does not 
+             - Amounts are cast to numeric(20,2). Amounts appear to be in USD (Ecuador is dollarized); the SENAE data dictionary does not 
 			   state the currency; USD is assumed because Ecuador is dollarized.
              - Some source text contains corrupted characters ('??'). They are kept as-is because the original character cannot be recovered.
              - Exact duplicate rows are kept: without a unique key they cannot be told apart from legitimate identical payments.
@@ -14,10 +14,10 @@
 CREATE OR REPLACE VIEW clean_data AS
 SELECT
 	NULLIF(SUBSTRING(TRIM(nom_distrito) FROM '^\d+'),'') 				AS district_code,			-- '^\d+' is used to identify a sequence of digits at the beginning of the text
-	REGEXP_REPLACE(TRIM(nom_distrito), '^\d+\s*-\s*', '') 				AS district_name,			--  ^ is used to identify from the begining a serial of numeric characters following of ' - ' and remplace with ''
+	REGEXP_REPLACE(TRIM(nom_distrito), '^\d+\s*-\s*', '') 				AS district_name,			--  ^ is used to identify from the begining a serial of numeric characters followed by ' - ' and replace it with ''
 	NULLIF(SUBSTRING(TRIM(nom_tributo) FROM '^\d+'), '') 				AS tax_code,
 	REGEXP_REPLACE(TRIM(nom_tributo), '^\d+\s*-\s*', '') 				AS tax_name,
-	fec_pago :: DATE													AS payment_date,			-- :: is used in PostgresSQL inside CAST(fec_pago AS date)
+	fec_pago :: DATE													AS payment_date,			-- :: is used in PostgresSQL instead of CAST(fec_pago AS date)
 	EXTRACT(YEAR FROM fec_pago::DATE)::INT								AS payment_year,
 	EXTRACT(MONTH FROM fec_pago::DATE)::INT								AS payment_month,
 	NULLIF(SUBSTRING(TRIM(nom_tipo_liquidacion) FROM '^\d+'), '') 		AS liquidation_type_code,
