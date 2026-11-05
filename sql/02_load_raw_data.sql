@@ -8,10 +8,10 @@
    Author:   Sebastián Velasteguí
    ============================================================================================================================================================================ */
 
--- Use DROP TABLE IF EXISTS to avoid any error in the future traying creating an table already exists
+-- Use DROP TABLE IF EXISTS to avoid an error when creating a table already exists
 DROP TABLE IF EXISTS raw_data CASCADE;
 
--- Create a table with the headers and text value types to avoid any error at the time to load the csv's information
+-- Create a table with the csv headers and text data types to avoid errors when loading the data
 CREATE TABLE raw_data (
 	nom_distrito                         text,
 	nom_tributo                          text,
@@ -27,7 +27,7 @@ CREATE TABLE raw_data (
 	valor_total_tributo_pagado           text
 );
 
--- Load the information from the csv to the table setting the format, delimeter and header
+-- Load each csv file into the table, setting the format, delimeter and header
 \copy raw_data FROM 'C:/data/raw/senae_recaudaciones_enero_diciembre_2021.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
 \copy raw_data FROM 'C:/data/raw/senae_recaudaciones_enero_diciembre_2022.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
 \copy raw_data FROM 'C:/data/raw/senae_recaudaciones_enero_diciembre_2023.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
