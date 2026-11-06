@@ -1,13 +1,13 @@
 /* ================================================================================================================================================================
    Project:  Ecuador Customs Tax Collection (SENAE), 2021-2026
    Purpose:  Document and verify the data quality assumptions behind the analysis. Run after sql/03_cleaning.
-   Notes:    Each check state its output and finding.
+   Notes:    Each check states its output and finding.
    Author:   Sebastián Velasteguí
    ================================================================================================================================================================ */
  
 /* ================================================================================================================================================================
    Output:   Row count per year. Expected: 2021-2025 full years; 2026 partial.
-   Finding:  There is not a notable difference throughout the years. 2021: 169249, 2022:187790, 2023:193116, 2024:205188, 2025:212793, 2026: 159680 until September.
+   Finding:  There is not a notable difference throughout the years. 2021: 169249, 2022: 187790, 2023: 193116, 2024: 205188, 2025: 212793, 2026: 159680 until September.
    ================================================================================================================================================================ */
 SELECT payment_year, 
 	COUNT(*) 
@@ -15,17 +15,17 @@ FROM clean_data
 GROUP BY payment_year;
  
 /* ================================================================================================================================================================
-   Output:   Accounting identity: credit note + cash = total paid.
+   Output:   Accounting identity: credit note + cash = total difference.
    Finding:  In 2025 there is a difference of USD 0.02 due to the use of the numeric(20,2) format; in the other years there is no difference.
    ================================================================================================================================================================ */
 SELECT payment_year, 
-	SUM(ABS(amount_credit_notes + amount_cash - amount_paid)) AS total_paid
+	SUM(ABS(amount_credit_notes + amount_cash - amount_paid)) AS total_difference
 FROM clean_data
 GROUP BY payment_year;
  
 /* ================================================================================================================================================================
    Output:   Payment dates outside the expected window.
-   Finding:  There are no payments outside the expected windows.
+   Finding:  There are no payments outside the expected window.
    ================================================================================================================================================================ */
 SELECT COUNT(*) AS out_of_range
 FROM clean_data
@@ -43,7 +43,7 @@ FROM clean_data
 WHERE amount_paid < 0;
  
 /* ================================================================================================================================================================
-   Output:   Rows with corrupted characters ('??') in the infraction text.
+   Output:   Rows with corrupted characters ('??') in each text column.
    Finding:  There are two columns with corrupted characters, nom_tributo column with 62479 and nom_infraccion with 5376 rows.
    ================================================================================================================================================================ */
 SELECT 
@@ -58,14 +58,14 @@ FROM raw_data;
 
 /* ================================================================================================================================================================
    Output:   Columns with a single distinct value carry no information.
-   Finding:  The only column with a single value is nom_estado_liquidacion.
+   Finding:  nom_estado_liquidacion column has a single value.
    ================================================================================================================================================================ */
-SELECT COUNT(DISTINCT nom_estado_liquidacion) AS distinr_statuses
+SELECT COUNT(DISTINCT nom_estado_liquidacion) AS distinct_statuses
 FROM raw_data;
  
 /* ================================================================================================================================================================
    Output:   Share of revenue with no recorded payment channel
-   Finding:  The 1.29% of the payments don't have a channel, which means USD 302093091.48.
+   Finding:  The 1.29% of the total amount paid don't have a channel, which means USD 302093091.48.
    ================================================================================================================================================================ */
 WITH total_amount AS(
   	SELECT SUM(amount_paid) AS sum_total_amount
