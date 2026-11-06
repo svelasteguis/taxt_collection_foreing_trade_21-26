@@ -2,7 +2,7 @@
    Project:  Ecuador Customs Tax Collection (SENAE), 2021-2026
    Purpose:  Load the yearly SENAE CSV files into one raw staging table.
    Output:   raw_data (all columns stored as text, no transformations)
-   Notes:    - Every column is text on purpose: casting and cleaning happen in sql/03_create_clean_view, so the raw layer always mirrors the source.
+   Notes:    - Every column is text on purpose: casting and cleaning happen in sql/03_create_clean_view.sql, so the raw layer always mirrors the source.
              - The CSV column order matches the table definition below.
              - The 2026 file is partial (January-September).
    Author:   Sebastián Velasteguí
