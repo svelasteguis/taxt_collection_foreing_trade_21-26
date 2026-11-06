@@ -1,6 +1,6 @@
 /* ================================================================================================================================================================
    Project:  Ecuador Customs Tax Collection (SENAE), 2021-2026
-   Purpose:  Document and verify the data quality assumptions behind the analysis. Run after sql/03_cleaning.
+   Purpose:  Document and verify the data quality assumptions behind the analysis. Run after sql/03_create_clean_view.sql.
    Notes:    Each check states its output and finding.
    Author:   Sebastián Velasteguí
    ================================================================================================================================================================ */
