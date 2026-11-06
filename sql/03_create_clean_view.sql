@@ -8,6 +8,11 @@
              - Some source text contains corrupted characters ('??'). They are kept as-is because the original character cannot be recovered.
              - Exact duplicate rows are kept: without a unique key they cannot be told apart from legitimate identical payments.
 			 - The 'nom_estado_liquidacion' column was not used because it has a single value ('C-PAGADO'): all rows are paid.
+			 - The fields' meanings are in the SENAE's dictionary (senae_recaudacionesdetributoscomercioexterior_dd_2024ene.ods).
+			 - payment_date is the date when the tax was paid, so the amounts were registered in the month of paid.
+			 - amount_paid is the total amount of the tax generated. It is equal to amount_cash plus amount_credit_notes.
+			 - NO APLICA in the columns infraction_name and sanction_type_name were interpreted as the record does not have an infraction or a sanction
+			 - The channel OTROS appears in the raw dataset as '12-OTROS' and '5 12-OTROS'; both were cleaned to the code 12
    Author:   Sebastián Velasteguí
    ======================================================================================================================================================== */
 
@@ -29,7 +34,7 @@ SELECT
 	NULLIF(SUBSTRING(TRIM(nom_tipo_sancion) FROM '^\d+'), '')			AS sanction_type_code,
 	REGEXP_REPLACE(TRIM(nom_tipo_sancion), '^\d+\s*-\s*', '')			AS sanction_type_name,
 	NULLIF(SUBSTRING(TRIM(canal_pago) FROM '(\d+)\s*-'), '')   			AS payment_channel_code,
-	REGEXP_REPLACE(TRIM(canal_pago), '^[0-9 ]+-\s*', '')        		AS payment_channel_name,
+	REGEXP_REPLACE(TRIM(canal_pago), '^[0-9 ]+-\s*', '')        		AS payment_channel_name,	-- There are two formats (5 12-OTROS and 12-OTROS) for Others (OTROS) so it keeps the code 12 
 	valor_total_tributo_en_nc :: numeric(20,2)							AS amount_credit_notes, 	-- numeric keeps exact decimal values
 	valor_total_tributo_en_efectivo :: numeric(20,2)					AS amount_cash,
 	valor_total_tributo_pagado :: numeric(20,2)							AS amount_paid				-- Cash plus credit note
