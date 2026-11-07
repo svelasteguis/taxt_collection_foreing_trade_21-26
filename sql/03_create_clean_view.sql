@@ -6,7 +6,6 @@
              - Amounts are cast to numeric(20,2). Amounts appear to be in USD (Ecuador is dollarized); the SENAE data dictionary does not 
 			   state the currency.
              - Some source text contains corrupted characters ('??'). They are kept as-is because the original character cannot be recovered.
-             - Exact duplicate rows are kept: without a unique key they cannot be told apart from legitimate identical payments.
 			 - The 'nom_estado_liquidacion' column was not used because it has a single value ('C-PAGADO'): all rows are paid.
 			 - The fields' meanings are in the SENAE's dictionary (senae_recaudacionesdetributoscomercioexterior_dd_2024ene.ods).
 			 - payment_date is the date when the tax was paid, so the amounts were registered in the month of paid.
