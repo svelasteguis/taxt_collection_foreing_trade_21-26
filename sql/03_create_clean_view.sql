@@ -13,6 +13,8 @@
 			 - amount_paid is the total amount of the tax generated. It is equal to amount_cash plus amount_credit_notes.
 			 - NO APLICA in the columns infraction_name and sanction_type_name were interpreted as the record does not have an infraction or a sanction
 			 - The channel OTROS appears in the raw dataset as '12-OTROS' and '5 12-OTROS'; both were cleaned to the code 12
+			 - amount_cash is used for analysis totals.
+			 - amount_paid is kept in the view for tax breakdown, as the portal suggests
    Author:   Sebastián Velasteguí
    ======================================================================================================================================================== */
 
