@@ -1,6 +1,6 @@
 /* ================================================================================================================================================================
    Project:  Ecuador Customs Tax Collection (SENAE), 2021-2026
-   Notes:    amount_cash is used because the author suggest this field to total collecting
+   Notes:    amount_cash is used because the author suggests this field for total collections
    Author:   Sebastián Velasteguí
    ================================================================================================================================================================*/
 
