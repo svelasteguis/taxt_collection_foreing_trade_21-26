@@ -28,9 +28,9 @@ CREATE TABLE raw_data (
 );
 
 -- Load each csv file into the table, setting the format, delimeter and header
-\copy raw_data FROM 'C:/data/raw/senae_recaudaciones_enero_diciembre_2021.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
-\copy raw_data FROM 'C:/data/raw/senae_recaudaciones_enero_diciembre_2022.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
-\copy raw_data FROM 'C:/data/raw/senae_recaudaciones_enero_diciembre_2023.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
-\copy raw_data FROM 'C:/data/raw/senae_recaudaciones_enero_diciembre_2024.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
-\copy raw_data FROM 'C:/data/raw/senae_recaudaciones_ene_dic_2025.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
-\copy raw_data FROM 'C:/data/raw/senae_recaudaciones_ene_sep_2026.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
+\copy raw_data FROM 'data/raw/senae_recaudaciones_enero_diciembre_2021.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
+\copy raw_data FROM 'data/raw/senae_recaudaciones_enero_diciembre_2022.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
+\copy raw_data FROM 'data/raw/senae_recaudaciones_enero_diciembre_2023.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
+\copy raw_data FROM 'data/raw/senae_recaudaciones_enero_diciembre_2024.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
+\copy raw_data FROM 'data/raw/senae_recaudaciones_ene_dic_2025.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
+\copy raw_data FROM 'data/raw/senae_recaudaciones_ene_sep_2026.csv' WITH (FORMAT csv,DELIMITER '|', HEADER true)
