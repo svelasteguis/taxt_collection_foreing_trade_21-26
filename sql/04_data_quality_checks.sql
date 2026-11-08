@@ -107,7 +107,7 @@ GROUP BY payment_year
 ORDER BY payment_year;
 
 /* ================================================================================================================================================================
-   Output:   Rows where only the sanction or the is 'NO APLICA'.
+   Output:   Rows where only the sanction or the infraction is 'NO APLICA'.
    Finding:  There is not any infraction or sanction without a match between them.
    ================================================================================================================================================================ */
 SELECT COUNT(*) FILTER(WHERE infraction_name = 'NO APLICA' AND sanction_type_name <> 'NO APLICA') 	AS infraction_none_sanction_present,
