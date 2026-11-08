@@ -11,7 +11,7 @@
 -- Use DROP TABLE IF EXISTS to avoid an error when creating a table that already exists
 DROP TABLE IF EXISTS raw_data CASCADE;
 
--- Create a table with the csv headers and text data types to avoid errors when loading the data
+-- Create a table with the CSV headers and text data types to avoid errors when loading the data
 CREATE TABLE raw_data (
 	nom_distrito                         text,
 	nom_tributo                          text,
@@ -27,7 +27,7 @@ CREATE TABLE raw_data (
 	valor_total_tributo_pagado           text
 );
 
--- Load each CSV file into the table, setting the format, delimeter and header
+-- Load each CSV file into the table, setting the format, delimiter and header
 \copy raw_data FROM 'data/raw/senae_recaudaciones_enero_diciembre_2021.csv' WITH (FORMAT CSV,delimiter '|', HEADER true)
 \copy raw_data FROM 'data/raw/senae_recaudaciones_enero_diciembre_2022.csv' WITH (FORMAT CSV,delimiter '|', HEADER true)
 \copy raw_data FROM 'data/raw/senae_recaudaciones_enero_diciembre_2023.csv' WITH (FORMAT CSV,delimiter '|', HEADER true)
