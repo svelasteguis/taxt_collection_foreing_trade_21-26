@@ -55,8 +55,8 @@ WHERE payment_date < '2021-01-01'
 SELECT 
     COUNT(*) FILTER (WHERE amount_credit_notes < 0) 					AS rows_credit_notes,
     SUM(amount_credit_notes) FILTER (WHERE amount_credit_notes < 0) 	AS amount_credit_notes,
-    COUNT(*) FILTER (WHERE amount_cash < 0) 							AS row_negative_values, 
-    SUM(amount_cash) FILTER (WHERE amount_cash < 0) 					AS sum_negative_values
+    COUNT(*) FILTER (WHERE amount_cash < 0) 							AS row_negative_cash_values, 
+    SUM(amount_cash) FILTER (WHERE amount_cash < 0) 					AS sum_negative_cash_values
 FROM clean_data;
  
 /* ================================================================================================================================================================
@@ -86,11 +86,11 @@ FROM raw_data;
 			 have a payment channel; it means USD 302093091.48.
    ================================================================================================================================================================ */
 SELECT
-	COUNT(*) FILTER(WHERE payment_channel_name = 'SIN CANAL' AND amount_cash <> 0)		AS cash_rows_without_channel,
-	SUM(amount_credit_notes) FILTER(WHERE payment_channel_name = 'SIN CANAL')			AS credit_notes_without_channel,
-	SUM(amount_credit_notes)															AS total_credit_notes,
+	COUNT(*) FILTER(WHERE payment_channel_name = 'SIN CANAL' AND amount_cash <> 0)				AS cash_rows_without_channel,
+	SUM(amount_credit_notes) FILTER(WHERE payment_channel_name = 'SIN CANAL')					AS credit_notes_without_channel,
+	SUM(amount_credit_notes)																	AS total_credit_notes,
 	ROUND(100 * SUM(amount_credit_notes) FILTER(WHERE payment_channel_name = 'SIN CANAL')
-		/ SUM(amount_credit_notes), 2)													AS share_of_credit_notes
+		/ SUM(amount_credit_notes), 2)															AS share_of_credit_notes
 FROM clean_data;
 
 /* ================================================================================================================================================================
@@ -101,7 +101,7 @@ FROM clean_data;
 SELECT payment_year,
 	SUM(amount_credit_notes) 											AS total_credit_notes, 
 	SUM(amount_paid)													AS total_amount_paid,
-	ROUND(100 * SUM(amount_credit_notes) / SUM(amount_paid), 2)		AS share_credit_notes_amount_paid
+	ROUND(100 * SUM(amount_credit_notes) / SUM(amount_paid), 2)			AS share_credit_notes_amount_paid
 FROM clean_data
 GROUP BY payment_year
 ORDER BY payment_year;
