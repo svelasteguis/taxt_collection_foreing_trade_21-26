@@ -82,8 +82,8 @@ FROM raw_data;
  
 /* ================================================================================================================================================================
    Output:   Cash and credit notes without payment channel.
-   Finding:  There are no cash payments without channel, so the movements without channel correspond to credit notes. The 95.58% of the credit notes amount don't have 
-   			 a payment channel; it means USD 302093091.48.
+   Finding:  There are no cash payments without channel, so the movements without channel correspond to credit notes. The 95.58% of the credit notes amount doesn't 
+			 have a payment channel; it means USD 302093091.48.
    ================================================================================================================================================================ */
 SELECT
 	COUNT(*) FILTER(WHERE payment_channel_name = 'SIN CANAL' AND amount_cash <> 0)		AS cash_rows_without_channel,
@@ -94,8 +94,8 @@ SELECT
 FROM clean_data;
 
 /* ================================================================================================================================================================
-   Output:   Credit notes per year and the share revenue.
-   Finding:  The year with the least paid with credit notes is 2026 with 0.56% of the total amount paid (until September), and the highest is 2023 with 2.47%; 
+   Output:   Credit notes per year and the revenue share.
+   Finding:  The year with the lowest share paid with credit notes is 2026 with 0.56% of the total amount paid (until September), and the highest is 2023 with 2.47%; 
    			 it means USD 92716798.84 from credit notes.
    ================================================================================================================================================================ */
 SELECT payment_year,
