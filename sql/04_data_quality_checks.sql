@@ -23,7 +23,7 @@ SELECT (SELECT COUNT(DISTINCT canal_pago) 			FROM raw_data)		AS number_payment_c
 
 /* ================================================================================================================================================================
    Output:   Row count per year. Expected: 2021-2025 full years; 2026 partial.
-   Finding:  There is not a notable difference throughout the years. 2021: 169249, 2022: 187790, 2023: 193116, 2024: 205188, 2025: 212793, 2026: 159680 until September.
+   Finding:  There is an increase tendency throughout the years. 2021: 169249, 2022: 187790, 2023: 193116, 2024: 205188, 2025: 212793, 2026: 159680 until September.
    ================================================================================================================================================================ */
 SELECT payment_year, 
 	COUNT(*) 
@@ -31,7 +31,7 @@ FROM clean_data
 GROUP BY payment_year;
  
 /* ================================================================================================================================================================
-   Output:   Accounting identity: credit note + cash = total difference.
+   Output:   Accounting identity: credit note + cash = total paid.
    Finding:  In 2025 there is a difference of USD 0.02 due to the use of the numeric(20,2) format; in the other years there is no difference.
    ================================================================================================================================================================ */
 SELECT payment_year, 
@@ -53,10 +53,11 @@ WHERE payment_date < '2021-01-01'
    Finding:  There is one negative amount which has a total of USD -730.74; the other negative values are credit notes
    ================================================================================================================================================================ */
 SELECT 
-	COUNT(*)			    AS row_negative_values, 
-	SUM(amount_paid)		AS sum_negative_values
-FROM clean_data
-WHERE amount_cash < 0;
+    COUNT(*) FILTER (WHERE amount_credit_notes < 0) 					AS rows_credit_notes,
+    SUM(amount_credit_notes) FILTER (WHERE amount_credit_notes < 0) 	AS amount_credit_notes,
+    COUNT(*) FILTER (WHERE amount_cash < 0) 							AS row_negative_values, 
+    SUM(amount_cash) FILTER (WHERE amount_cash < 0) 					AS sum_negative_values
+FROM clean_data;
  
 /* ================================================================================================================================================================
    Output:   Rows with corrupted characters ('??') in each text column.
@@ -80,7 +81,7 @@ SELECT COUNT(DISTINCT nom_estado_liquidacion) AS distinct_statuses
 FROM raw_data;
  
 /* ================================================================================================================================================================
-   Output:   Share of revenue with no recorded payment channel
+   Output:   Cash and credit notes without payment channel
    Finding:  There are no cash payments without channel, so the movements without channel correspond to credit notes. The 95.58% of the credit notes amount don't have 
    			 a payment channel; it means USD 302093091.48.
    ================================================================================================================================================================ */
@@ -106,7 +107,7 @@ GROUP BY payment_year
 ORDER BY payment_year;
 
 /* ================================================================================================================================================================
-   Output:   Rows where sanction or infractions are 'NO APLICA'
+   Output:   Rows where sanction or infractions are 'NO APLICA' individually
    Finding:  There is not any infraction or sanction without a match between them.
    ================================================================================================================================================================ */
 SELECT COUNT(*) FILTER(WHERE infraction_name = 'NO APLICA' AND sanction_type_name <> 'NO APLICA') 	AS infraction_none_sanction_present,
