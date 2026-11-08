@@ -6,6 +6,22 @@
    ================================================================================================================================================================ */
  
 /* ================================================================================================================================================================
+   Output:   Duplicate rows
+   Finding:  There is not any duplicate row
+   ================================================================================================================================================================ */
+SELECT COUNT(*) 							AS total_rows,
+	COUNT(DISTINCT r::text) 				AS distinct_rows,
+	COUNT(*) - COUNT(DISTINCT r::text)		AS difference
+FROM raw_data AS r;
+
+/* ================================================================================================================================================================
+   Output:   payment_channel verification
+   Finding:  Before the cleaning there were ten unique values, after it left nine.
+   ================================================================================================================================================================ */
+SELECT (SELECT COUNT(DISTINCT canal_pago) 			FROM raw_data)		AS number_payment_channel_raw_data,
+	(SELECT COUNT(DISTINCT payment_channel_name) 	FROM clean_data)	AS number_payment_channel_clean_data;
+
+/* ================================================================================================================================================================
    Output:   Row count per year. Expected: 2021-2025 full years; 2026 partial.
    Finding:  There is not a notable difference throughout the years. 2021: 169249, 2022: 187790, 2023: 193116, 2024: 205188, 2025: 212793, 2026: 159680 until September.
    ================================================================================================================================================================ */
@@ -34,13 +50,13 @@ WHERE payment_date < '2021-01-01'
 
 /* ================================================================================================================================================================
    Output:   Reversals (negative amounts): count and net effect on revenue.
-   Finding:  There are 7 negative amounts which have a total of USD -1390.21.
+   Finding:  There is one negative amount which has a total of USD -730.74; the other negative values are credit notes
    ================================================================================================================================================================ */
 SELECT 
 	COUNT(*)			    AS row_negative_values, 
 	SUM(amount_paid)		AS sum_negative_values
 FROM clean_data
-WHERE amount_paid < 0;
+WHERE amount_cash < 0;
  
 /* ================================================================================================================================================================
    Output:   Rows with corrupted characters ('??') in each text column.
@@ -65,17 +81,34 @@ FROM raw_data;
  
 /* ================================================================================================================================================================
    Output:   Share of revenue with no recorded payment channel
-   Finding:  The 1.29% of the total amount paid don't have a channel, which means USD 302093091.48.
+   Finding:  There are no cash payments without channel, so the movements without channel correspond to credit notes. The 95.58% of the credit notes amount don't have 
+   			 a payment channel; it means USD 302093091.48.
    ================================================================================================================================================================ */
-WITH total_amount AS(
-  	SELECT SUM(amount_paid) AS sum_total_amount
-  	FROM clean_data
-),
-  sin_canal_payment AS (
-  	SELECT SUM(amount_paid) AS sum_sin_canal_payment
-  	FROM clean_data
-  	WHERE payment_channel_name = 'SIN CANAL'
-) 
-SELECT t.sum_total_amount, s.sum_sin_canal_payment,  
-	ROUND(100 * s.sum_sin_canal_payment/t.sum_total_amount,2) AS share_sin_canal_payment
-FROM total_amount t, sin_canal_payment s;
+SELECT
+	COUNT(*) FILTER(WHERE payment_channel_name = 'SIN CANAL' AND amount_cash <> 0)		AS cash_rows_without_channel,
+	SUM(amount_credit_notes) FILTER(WHERE payment_channel_name = 'SIN CANAL')			AS credit_notes_without_channel,
+	SUM(amount_credit_notes)															AS total_credit_notes,
+	ROUND(100 * SUM(amount_credit_notes) FILTER(WHERE payment_channel_name = 'SIN CANAL')
+		/ SUM(amount_credit_notes), 2)													AS share_of_credit_notes
+FROM clean_data;
+
+/* ================================================================================================================================================================
+   Output:   Credit notes per year and the share revenue
+   Finding:  The year with the least paid with credit notes is 2026 with 0.56% of the total amount paid (until September), and the highest is 2023 with 2.47%; 
+   			 it means USD 92716798.84 from credit notes
+   ================================================================================================================================================================ */
+SELECT payment_year,
+	SUM(amount_credit_notes) 											AS total_credit_notes, 
+	SUM(amount_paid)													AS total_amount_paid,
+	ROUND(100 * SUM(amount_credit_notes) / SUM(amount_paid), 2)		AS share_credit_notes_amount_paid
+FROM clean_data
+GROUP BY payment_year
+ORDER BY payment_year;
+
+/* ================================================================================================================================================================
+   Output:   Rows where sanction or infractions are 'NO APLICA'
+   Finding:  There is not any infraction or sanction without a match between them.
+   ================================================================================================================================================================ */
+SELECT COUNT(*) FILTER(WHERE infraction_name = 'NO APLICA' AND sanction_type_name <> 'NO APLICA') 	AS infraction_none_sanction_present,
+	COUNT(*) FILTER(WHERE infraction_name <> 'NO APLICA' AND sanction_type_name = 'NO APLICA')		AS infraction_present_sanction_none
+FROM clean_data;
