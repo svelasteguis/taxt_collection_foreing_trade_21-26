@@ -6,8 +6,8 @@
    ================================================================================================================================================================ */
  
 /* ================================================================================================================================================================
-   Output:   Duplicate rows
-   Finding:  There is not any duplicate row
+   Output:   Duplicate rows.
+   Finding:  There is not any duplicate row.
    ================================================================================================================================================================ */
 SELECT COUNT(*) 							AS total_rows,
 	COUNT(DISTINCT r::text) 				AS distinct_rows,
@@ -15,7 +15,7 @@ SELECT COUNT(*) 							AS total_rows,
 FROM raw_data AS r;
 
 /* ================================================================================================================================================================
-   Output:   payment_channel verification
+   Output:   payment_channel verification.
    Finding:  Before the cleaning there were ten unique values, after it left nine.
    ================================================================================================================================================================ */
 SELECT (SELECT COUNT(DISTINCT canal_pago) 			FROM raw_data)		AS number_payment_channel_raw_data,
@@ -23,7 +23,7 @@ SELECT (SELECT COUNT(DISTINCT canal_pago) 			FROM raw_data)		AS number_payment_c
 
 /* ================================================================================================================================================================
    Output:   Row count per year. Expected: 2021-2025 full years; 2026 partial.
-   Finding:  There is an increase tendency throughout the years. 2021: 169249, 2022: 187790, 2023: 193116, 2024: 205188, 2025: 212793, 2026: 159680 until September.
+   Finding:  There is an increasing trend throughout the years. 2021: 169249, 2022: 187790, 2023: 193116, 2024: 205188, 2025: 212793, 2026: 159680 until September.
    ================================================================================================================================================================ */
 SELECT payment_year, 
 	COUNT(*) 
@@ -50,7 +50,7 @@ WHERE payment_date < '2021-01-01'
 
 /* ================================================================================================================================================================
    Output:   Reversals (negative amounts): count and net effect on revenue.
-   Finding:  There is one negative amount which has a total of USD -730.74; the other negative values are credit notes
+   Finding:  There is one negative amount which has a total of USD -730.74; the other negative values are credit notes.
    ================================================================================================================================================================ */
 SELECT 
     COUNT(*) FILTER (WHERE amount_credit_notes < 0) 					AS rows_credit_notes,
@@ -81,7 +81,7 @@ SELECT COUNT(DISTINCT nom_estado_liquidacion) AS distinct_statuses
 FROM raw_data;
  
 /* ================================================================================================================================================================
-   Output:   Cash and credit notes without payment channel
+   Output:   Cash and credit notes without payment channel.
    Finding:  There are no cash payments without channel, so the movements without channel correspond to credit notes. The 95.58% of the credit notes amount don't have 
    			 a payment channel; it means USD 302093091.48.
    ================================================================================================================================================================ */
@@ -94,9 +94,9 @@ SELECT
 FROM clean_data;
 
 /* ================================================================================================================================================================
-   Output:   Credit notes per year and the share revenue
+   Output:   Credit notes per year and the share revenue.
    Finding:  The year with the least paid with credit notes is 2026 with 0.56% of the total amount paid (until September), and the highest is 2023 with 2.47%; 
-   			 it means USD 92716798.84 from credit notes
+   			 it means USD 92716798.84 from credit notes.
    ================================================================================================================================================================ */
 SELECT payment_year,
 	SUM(amount_credit_notes) 											AS total_credit_notes, 
@@ -107,7 +107,7 @@ GROUP BY payment_year
 ORDER BY payment_year;
 
 /* ================================================================================================================================================================
-   Output:   Rows where sanction or infractions are 'NO APLICA' individually
+   Output:   Rows where only the sanction or the is 'NO APLICA'.
    Finding:  There is not any infraction or sanction without a match between them.
    ================================================================================================================================================================ */
 SELECT COUNT(*) FILTER(WHERE infraction_name = 'NO APLICA' AND sanction_type_name <> 'NO APLICA') 	AS infraction_none_sanction_present,
