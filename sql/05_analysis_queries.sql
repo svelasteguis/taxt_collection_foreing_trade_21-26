@@ -1,6 +1,6 @@
 /* ================================================================================================================================================================
    Project:  Ecuador Customs Tax Collection (SENAE), 2021-2026
-   Notes:    amount_cash is used because the author suggests this field for total collections
+   Notes:    amount_cash is used because the SENAE's library suggests this field for total collections
    Author:   Sebastián Velasteguí
    ================================================================================================================================================================*/
 
@@ -78,10 +78,10 @@ LIMIT 3;
    Question 3: How does monthly collection evolve, and which months were the best?
    Output:   (a) monthly total with year-over-year change
              (b) top 5 individual months by collection
-   Finding:  (a) Compared with the same month of the previous year, monthly collection was higher in 11 of 12 months in 2022, 1 of 12 in 2023, 6 of 12 in 2024 and all 12 in
+   Finding:  (a) Compared with the same month of the previous year, monthly collection was higher in 11 of 12 months in 2022, 6 of 12 in 2024 and all 12 in
 				 2025, but in only 1 of 12 in 2023. All nine months of 2026 (through September) were above the same months of 2025.
    Finding:	 (b) The individual months from 2021 to partial 2026 with the highest collected amount were April 2026; July 2026; October 2025; August 2026; May 2026.
-				 The highest-collecting month had 476 million USD and the lowest of the group had 440 million.
+				 The highest-collecting month had 471 million USD and the lowest of the group had 438 million.
    ================================================================================================================================================================*/
 -- (a) monthly total with year-over-year change
 SELECT payment_year, payment_month,
@@ -136,7 +136,7 @@ LIMIT 3;
 				 nearly 34 thousand times and collected USD 17996348.31.
    Finding:	 (c) The 3 highest-collecting infractions are "COPCI ART. 193 LITERAL D", "COPCI ART. 190 LITERAL B" and 
 				 "LEY S/N R.O. 525-5S COPCI ART. 190, LIT N; COIP ART. 299, NUM 3; COIP DISP. GEN. 4TA-ART. 299 COIP, NUMERAL 3". The first of them was registered 
-				 nearly 13 thousand times and collected USD 7814041.38.
+				 just over 13 thousand times and collected USD 7814041.38.
    ================================================================================================================================================================*/
 -- (a) sanctions as a share of total revenue
 SELECT 
@@ -168,7 +168,7 @@ LIMIT 3;
 /* ================================================================================================================================================================
    Question 6: How many times larger is Guayaquil Maritime collection than Guayaquil Air, and is that ratio stable over time?
    Output:   One row per year with both totals and their ratio.
-   Finding:  The maritime-to-air ratio was 16.05 in 2021 and peaked at 18.99 in 2022. Since 2023 it has stayed between 17.35 and 17.85 and in 2026 until
+   Finding:  The maritime-to-air ratio was 16.05 in 2021 and peaked at 18.99 in 2022. Since 2023 it has stayed between 17.07 and 17.85 and in 2026 until
 			 September was 17.07, so Guayaquil Maritime collects roughly 17 to 18 times more than Guayaquil Air.
    ================================================================================================================================================================*/
 SELECT payment_year,
