@@ -8,7 +8,7 @@
    Question 1: Which customs districts collect the most, and how concentrated is revenue?
    Output:   (a) top 5 districts with share and cumulative share of the total
              (b) top 3 districts per year, to see whether concentration changes
-   Finding:  (a) Guayaquil Maritime is the highest-collecting district with nearly two-thirds of the total share (64.74%). The top five districts collect 96.45% 
+   Finding:  (a) Guayaquil Maritime is the highest-collecting district with nearly two-thirds of the total share (64.83%). The top five districts collect 96.47% 
 				 of the total.
    Finding:	 (b) The same three districts ranked in the top three every year: Guayaquil Maritime was first throughout, Manta was second in 2021-2023 and 2026, 
 				 and Quito was second in 2024 and 2025.
@@ -48,8 +48,8 @@ ORDER BY payment_year, ranking_year;
 /* ================================================================================================================================================================
    Question 2: Which payment channels dominate in the highest-collecting district?
    Output:   Top 3 payment channels with their share of that district's revenue.
-   Finding:  The highest-collecting district is Guayaquil Maritime and the top 3 payment channels in this district are Internet with a share of 41.88%, other 
-			 devices with 31.06% and the last one, Ventanilla with 24.17%.
+   Finding:  The highest-collecting district is Guayaquil Maritime and the top 3 payment channels in this district are Internet with a share of 42.39%, other 
+			 devices with 31.45% and the last one, Ventanilla with 24.47%.
    ================================================================================================================================================================*/
 WITH highest_collection_district AS (	
 	SELECT district_name
@@ -78,9 +78,9 @@ LIMIT 3;
    Question 3: How does monthly collection evolve, and which months were the best?
    Output:   (a) monthly total with year-over-year change
              (b) top 5 individual months by collection
-   Finding:  (a) Compared with the same month of the previous year, monthly collection was higher in 11 of 12 months in 2022, 8 of 12 in 2024 and all 12 in
+   Finding:  (a) Compared with the same month of the previous year, monthly collection was higher in 11 of 12 months in 2022, 1 of 12 in 2023, 6 of 12 in 2024 and all 12 in
 				 2025, but in only 1 of 12 in 2023. All nine months of 2026 (through September) were above the same months of 2025.
-   Finding:	 (b) The individual months from 2021 to partial 2026 with the highest collected amount were April 2026; October 2025; July 2026; December 2025; August 2026.
+   Finding:	 (b) The individual months from 2021 to partial 2026 with the highest collected amount were April 2026; July 2026; October 2025; August 2026; May 2026.
 				 The highest-collecting month had 476 million USD and the lowest of the group had 440 million.
    ================================================================================================================================================================*/
 -- (a) monthly total with year-over-year change
@@ -133,10 +133,10 @@ LIMIT 3;
              (c) top 3 infractions by amount
    Finding:  (a) Income from sanctions just represents 0.17% of the total.
    Finding:	 (b) The 3 highest-collecting sanctions are 'Falta Reglamentaria', 'Contravención' and 'Contravención - Contrabando'. The first of them was registered 
-				 nearly 34 thousand times and collected 18303208.14 USD.
+				 nearly 34 thousand times and collected USD 17996348.31.
    Finding:	 (c) The 3 highest-collecting infractions are "COPCI ART. 193 LITERAL D", "COPCI ART. 190 LITERAL B" and 
 				 "LEY S/N R.O. 525-5S COPCI ART. 190, LIT N; COIP ART. 299, NUM 3; COIP DISP. GEN. 4TA-ART. 299 COIP, NUMERAL 3". The first of them was registered 
-				 nearly 13 thousand times and collected 8011393.02 USD.
+				 nearly 13 thousand times and collected USD 7814041.38.
    ================================================================================================================================================================*/
 -- (a) sanctions as a share of total revenue
 SELECT 
@@ -168,8 +168,8 @@ LIMIT 3;
 /* ================================================================================================================================================================
    Question 6: How many times larger is Guayaquil Maritime collection than Guayaquil Air, and is that ratio stable over time?
    Output:   One row per year with both totals and their ratio.
-   Finding:  The maritime-to-air ratio was 16.08 in 2021 and peaked at 19.04 in 2022. Since 2023 it has stayed between 17.1 and 18.0 and in 2026 until
-			 September was 17.11, so Guayaquil Maritime collects roughly 17 to 18 times more than Guayaquil Air.
+   Finding:  The maritime-to-air ratio was 16.05 in 2021 and peaked at 18.99 in 2022. Since 2023 it has stayed between 17.35 and 17.85 and in 2026 until
+			 September was 17.07, so Guayaquil Maritime collects roughly 17 to 18 times more than Guayaquil Air.
    ================================================================================================================================================================*/
 SELECT payment_year,
 	SUM(amount_cash) FILTER(WHERE district_name = 'GUAYAQUIL - MARITIMO')						AS maritime_cash,
