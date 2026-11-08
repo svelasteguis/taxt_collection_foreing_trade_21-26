@@ -10,10 +10,10 @@
 			 - The fields' meanings are in the SENAE's dictionary (senae_recaudacionesdetributoscomercioexterior_dd_2024ene.ods).
 			 - payment_date is the date when the tax was paid, so the amounts were registered in the month of payment.
 			 - amount_paid is the total amount of the tax generated. It is equal to amount_cash plus amount_credit_notes.
-			 - NO APLICA in the columns infraction_name and sanction_type_name was interpreted to mean that the record does not have an infraction or a sanction
-			 - The channel OTROS appears in the raw dataset as '12-OTROS' and '5 12-OTROS'; both were cleaned to the code 12
+			 - NO APLICA in the columns infraction_name and sanction_type_name was interpreted to mean that the record does not have an infraction or a sanction.
+			 - The channel OTROS appears in the raw dataset as '12-OTROS' and '5 12-OTROS'; both were cleaned to the code 12.
 			 - amount_cash is used for analysis totals.
-			 - amount_paid is kept in the view for tax breakdown, as the portal suggests
+			 - amount_paid is kept in the view for tax breakdown, as the portal suggests.
    Author:   Sebastián Velasteguí
    ======================================================================================================================================================== */
 
