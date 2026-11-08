@@ -94,7 +94,7 @@ SELECT
 FROM clean_data;
 
 /* ================================================================================================================================================================
-   Output:   Credit notes per year and the revenue share.
+   Output:   Credit notes per year and the share of the total amount paid.
    Finding:  The year with the lowest share paid with credit notes is 2026 with 0.56% of the total amount paid (until September), and the highest is 2023 with 2.47%; 
    			 it means USD 92716798.84 from credit notes.
    ================================================================================================================================================================ */
