@@ -8,7 +8,7 @@
    Author:   Sebastián Velasteguí
    ============================================================================================================================================================================ */
 
--- Use DROP TABLE IF EXISTS to avoid an error when creating a table already exists
+-- Use DROP TABLE IF EXISTS to avoid an error when creating a table that already exists
 DROP TABLE IF EXISTS raw_data CASCADE;
 
 -- Create a table with the csv headers and text data types to avoid errors when loading the data
