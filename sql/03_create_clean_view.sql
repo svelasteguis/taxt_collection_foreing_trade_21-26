@@ -36,7 +36,7 @@ SELECT
 	REGEXP_REPLACE(TRIM(nom_tipo_sancion), '^\d+\s*-\s*', '')			AS sanction_type_name,
 	NULLIF(SUBSTRING(TRIM(canal_pago) FROM '(\d+)\s*-'), '')   			AS payment_channel_code,
 	REGEXP_REPLACE(TRIM(canal_pago), '^[0-9 ]+-\s*', '')        		AS payment_channel_name,	-- There are two formats (5 12-OTROS and 12-OTROS) for Others (OTROS) so it keeps the code 12 
-	valor_total_tributo_en_nc :: numeric(20,2)							AS amount_credit_notes, 	-- numeric keeps exact decimal values
+	valor_total_tributo_en_nc :: numeric(20,2)							AS amount_credit_notes, 	-- numeric round to two decimal places
 	valor_total_tributo_en_efectivo :: numeric(20,2)					AS amount_cash,
 	valor_total_tributo_pagado :: numeric(20,2)							AS amount_paid				-- Cash plus credit note
 FROM raw_data;
