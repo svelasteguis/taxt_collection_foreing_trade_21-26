@@ -1,6 +1,6 @@
 # Data Quality Log
 Author: Sebastián Velasteguí
-When the checks were run: November 8, 2026 
+The checks were run on: November 8, 2026 
 
 | Check | Result | Decision |
 | --- | --- | --- |
