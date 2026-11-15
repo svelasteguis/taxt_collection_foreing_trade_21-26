@@ -18,25 +18,24 @@
    ======================================================================================================================================================== */
 
 CREATE OR REPLACE VIEW clean_data AS
-SELECT
-	NULLIF(SUBSTRING(TRIM(nom_distrito) FROM '^\d+'),'') 				AS district_code,			-- '^\d+' is used to identify a sequence of digits at the beginning of the text
-	REGEXP_REPLACE(TRIM(nom_distrito), '^\d+\s*-\s*', '') 				AS district_name,			-- '^\d+' is used to identify at the beginning a series of numeric characters followed by '\s*-\s*' and replace it with ''
-	NULLIF(SUBSTRING(TRIM(nom_tributo) FROM '^\d+'), '') 				AS tax_code,
-	REGEXP_REPLACE(TRIM(nom_tributo), '^\d+\s*-\s*', '') 				AS tax_name,
-	fec_pago :: DATE													AS payment_date,			-- :: is used in PostgreSQL instead of CAST(fec_pago AS date)
-	EXTRACT(YEAR FROM fec_pago::DATE)::INT								AS payment_year,
-	EXTRACT(MONTH FROM fec_pago::DATE)::INT								AS payment_month,
-	NULLIF(SUBSTRING(TRIM(nom_tipo_liquidacion) FROM '^\d+'), '') 		AS liquidation_type_code,
-	REGEXP_REPLACE(TRIM(nom_tipo_liquidacion), '^\d+\s*-\s*', '') 		AS liquidation_type_name,
-	NULLIF(SUBSTRING(TRIM(tipos_doc_referencia) FROM '^\d+'),'') 		AS reference_doc_code,
-	REGEXP_REPLACE(TRIM(tipos_doc_referencia), '^\d+\s*-\s*', '') 		AS reference_doc_name,
-	NULLIF(SUBSTRING(TRIM(nom_infraccion) FROM '^\d+'),'') 				AS infraction_code,
-	REGEXP_REPLACE(TRIM(nom_infraccion), '^\d+\s*-\s*', '') 			AS infraction_name,
-	NULLIF(SUBSTRING(TRIM(nom_tipo_sancion) FROM '^\d+'), '')			AS sanction_type_code,
-	REGEXP_REPLACE(TRIM(nom_tipo_sancion), '^\d+\s*-\s*', '')			AS sanction_type_name,
-	NULLIF(SUBSTRING(TRIM(canal_pago) FROM '(\d+)\s*-'), '')   			AS payment_channel_code,
-	REGEXP_REPLACE(TRIM(canal_pago), '^[0-9 ]+-\s*', '')        		AS payment_channel_name,	-- There are two formats (5 12-OTROS and 12-OTROS) for Others (OTROS) so it keeps the code 12 
-	valor_total_tributo_en_nc :: numeric(20,2)							AS amount_credit_notes, 	-- numeric rounds to two decimal places
-	valor_total_tributo_en_efectivo :: numeric(20,2)					AS amount_cash,
-	valor_total_tributo_pagado :: numeric(20,2)							AS amount_paid				-- Cash plus credit note
+SELECT NULLIF("substring"(TRIM(BOTH FROM nom_distrito), '^\d+'::text), ''::text)::integer 		AS district_code,				-- '^\d+' is used to identify a sequence of digits at the beginning of the text
+    regexp_replace(TRIM(BOTH FROM nom_distrito), '^\d+\s*-\s*'::text, ''::text) 				AS district_name,				-- '^\d+' is used to identify at the beginning a series of numeric characters followed by '\s*-\s*' and replace it with ''
+    NULLIF("substring"(TRIM(BOTH FROM nom_tributo), '^\d+'::text), ''::text)::integer 			AS tax_code,
+    regexp_replace(TRIM(BOTH FROM nom_tributo), '^\d+\s*-\s*'::text, ''::text) 					AS tax_name,
+    fec_pago::date 																				AS payment_date,				-- :: is used in PostgreSQL instead of CAST(fec_pago AS date)
+    EXTRACT(year FROM fec_pago::date)::integer 													AS payment_year,
+    EXTRACT(month FROM fec_pago::date)::integer 												AS payment_month,
+    NULLIF("substring"(TRIM(BOTH FROM nom_tipo_liquidacion), '^\d+'::text), ''::text)::integer 	AS liquidation_type_code,
+    regexp_replace(TRIM(BOTH FROM nom_tipo_liquidacion), '^\d+\s*-\s*'::text, ''::text)			AS liquidation_type_name,
+    NULLIF("substring"(TRIM(BOTH FROM tipos_doc_referencia), '^\d+'::text), ''::text)::integer 	AS reference_doc_code,
+    regexp_replace(TRIM(BOTH FROM tipos_doc_referencia), '^\d+\s*-\s*'::text, ''::text) 		AS reference_doc_name,
+    NULLIF("substring"(TRIM(BOTH FROM nom_infraccion), '^\d+'::text), ''::text)::integer		AS infraction_code,
+    regexp_replace(TRIM(BOTH FROM nom_infraccion), '^\d+\s*-\s*'::text, ''::text) 				AS infraction_name,
+    NULLIF("substring"(TRIM(BOTH FROM nom_tipo_sancion), '^\d+'::text), ''::text)::integer		AS sanction_type_code,
+    regexp_replace(TRIM(BOTH FROM nom_tipo_sancion), '^\d+\s*-\s*'::text, ''::text) 			AS sanction_type_name,
+    NULLIF("substring"(TRIM(BOTH FROM canal_pago), '(\d+)\s*-'::text), ''::text)::integer		AS payment_channel_code,
+    regexp_replace(TRIM(BOTH FROM canal_pago), '^[0-9 ]+-\s*'::text, ''::text) 					AS payment_channel_name,		-- There are two formats (5 12-OTROS and 12-OTROS) for Others (OTROS) so it keeps the code 12 
+    valor_total_tributo_en_nc::numeric(20,2) 													AS amount_credit_notes,			-- numeric rounds to two decimal places
+    valor_total_tributo_en_efectivo::numeric(20,2) 												AS amount_cash,
+    valor_total_tributo_pagado::numeric(20,2) 													AS amount_paid					-- Cash plus credit note
 FROM raw_data;
