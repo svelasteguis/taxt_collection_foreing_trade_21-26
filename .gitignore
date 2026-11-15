@@ -9,7 +9,7 @@ data/raw/*
 Thumbs.db
 .psql_history
 
-# Python (for the next steps)
+# Python
 __pycache__/
 .ipynb_checkpoints/
 .venv/
