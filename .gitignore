@@ -1,0 +1,15 @@
+# Raw data (not tracked: see data/README.md)
+data/raw/*
+!data/raw/.gitkeep
+
+# Local files
+.env
+*.log
+.DS_Store
+Thumbs.db
+.psql_history
+
+# Python (for the next steps)
+__pycache__/
+.ipynb_checkpoints/
+.venv/
