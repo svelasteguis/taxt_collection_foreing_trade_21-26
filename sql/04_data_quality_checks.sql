@@ -23,7 +23,7 @@ SELECT (SELECT COUNT(DISTINCT canal_pago) 			FROM raw_data)		AS number_payment_c
 
 /* ================================================================================================================================================================
    Output:   Row count per year. Expected: 2021-2025 full years; 2026 partial.
-   Finding:  There is an increasing trend throughout the years. 2021: 169249, 2022: 187790, 2023: 193116, 2024: 205188, 2025: 212793, 2026: 159680 until September.
+   Finding:  There is an increasing trend throughout the years. 2021: 169,249, 2022: 187,790, 2023: 193,116, 2024: 205,188, 2025: 212,793, 2026: 159,680 until September.
    ================================================================================================================================================================ */
 SELECT payment_year, 
 	COUNT(*) 
@@ -61,7 +61,7 @@ FROM clean_data;
  
 /* ================================================================================================================================================================
    Output:   Rows with corrupted characters ('??') in each text column.
-   Finding:  There are two columns with corrupted characters, nom_tributo column with 62479 and nom_infraccion with 5376 rows.
+   Finding:  There are two columns with corrupted characters, nom_tributo column with 62,479 and nom_infraccion with 5,376 rows.
    ================================================================================================================================================================ */
 SELECT 
 	COUNT(*) FILTER(WHERE nom_tributo LIKE '%??%') 					AS corrupted_nom_tributo,
@@ -83,7 +83,7 @@ FROM raw_data;
 /* ================================================================================================================================================================
    Output:   Cash and credit notes without payment channel.
    Finding:  There are no cash payments without channel, so the movements without channel correspond to credit notes. The 95.58% of the credit notes amount doesn't 
-			 have a payment channel; it means USD 302093091.48.
+			 have a payment channel; it means USD 302,093,091.48.
    ================================================================================================================================================================ */
 SELECT
 	COUNT(*) FILTER(WHERE payment_channel_name = 'SIN CANAL' AND amount_cash <> 0)				AS cash_rows_without_channel,
@@ -96,7 +96,7 @@ FROM clean_data;
 /* ================================================================================================================================================================
    Output:   Credit notes per year and the share of the total amount paid.
    Finding:  The year with the lowest share paid with credit notes is 2026 with 0.56% of the total amount paid (until September), and the highest is 2023 with 2.47%; 
-   			 it means USD 92716798.84 from credit notes.
+   			 it means USD 92,716,798.84 from credit notes.
    ================================================================================================================================================================ */
 SELECT payment_year,
 	SUM(amount_credit_notes) 											AS total_credit_notes, 
