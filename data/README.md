@@ -19,7 +19,7 @@
 | `senae_recaudaciones_enero_diciembre_2024.csv` | SENAE_RECAUDACIONESDETRIBUTOSDECOMERCIOEXTERIOR_2024 | January-December 2024 | 205,188 | 36.1 MB |
 | `senae_recaudaciones_ene_dic_2025.csv` | SENAE_RECAUDACIONESDETRIBUTOSDECOMERCIOEXTERIOR_2025 | January-December 2025 | 212,793 | 37.4 MB |
 | `senae_recaudaciones_ene_sep_2026.csv` | SENAE_RECAUDACIONESDETRIBUTOSDECOMERCIOEXTERIOR_2026ENE-SEP | January-September 2026 | 159,680 | 27.9 MB |
-| **TOTAL** | | | **1,127,816** | **213.4 MB** |
+| **TOTAL** | | | **1,127,816** | **≈ 213 MB** |
 
 ### Documentation Files
 | File Name | Title on the Portal | Content |
