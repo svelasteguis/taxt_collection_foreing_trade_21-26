@@ -133,7 +133,7 @@ LIMIT 3;
              (c) top 3 infractions by amount
    Finding:  (a) Income from sanctions just represents 0.17% of the total.
    Finding:	 (b) The 3 highest-collecting sanctions are 'Falta Reglamentaria', 'Contravención' and 'Contravención - Contrabando'. The first of them was registered 
-				 nearly 34 thousand times and collected USD 17996348.31.
+				 nearly 34 thousand times and collected USD 17,996,348.31.
    Finding:	 (c) The 3 highest-collecting infractions are "COPCI ART. 193 LITERAL D", "COPCI ART. 190 LITERAL B" and 
 				 "LEY S/N R.O. 525-5S COPCI ART. 190, LIT N; COIP ART. 299, NUM 3; COIP DISP. GEN. 4TA-ART. 299 COIP, NUMERAL 3". The first of them was registered 
 				 just over 13 thousand times and collected USD 7,814,041.38.
