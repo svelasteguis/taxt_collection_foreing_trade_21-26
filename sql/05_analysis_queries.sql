@@ -136,7 +136,7 @@ LIMIT 3;
 				 nearly 34 thousand times and collected USD 17996348.31.
    Finding:	 (c) The 3 highest-collecting infractions are "COPCI ART. 193 LITERAL D", "COPCI ART. 190 LITERAL B" and 
 				 "LEY S/N R.O. 525-5S COPCI ART. 190, LIT N; COIP ART. 299, NUM 3; COIP DISP. GEN. 4TA-ART. 299 COIP, NUMERAL 3". The first of them was registered 
-				 just over 13 thousand times and collected USD 7814041.38.
+				 just over 13 thousand times and collected USD 7,814,041.38.
    ================================================================================================================================================================*/
 -- (a) sanctions as a share of total revenue
 SELECT 
