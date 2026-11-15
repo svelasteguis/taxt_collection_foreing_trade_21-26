@@ -10,6 +10,7 @@
 - Downloaded on: October 15, 2026
 
 ## Files
+### Data Files
 | File Name | Title on the Portal | Period | Rows | Size |
 | --- | --- | --- | --- | --- |
 | senae_recaudaciones_enero_diciembre_2021.csv | SENAE_RECAUDACIONESDETRIBUTOSDECOMERCIOEXTERIOR_2021 | January - December 2021 | 169,249 | 37.2 MB |
@@ -20,17 +21,26 @@
 | senae_recaudaciones_ene_sep_2026.csv | SENAE_RECAUDACIONESDETRIBUTOSDECOMERCIOEXTERIOR_2026ENE-SEP | January - September 2026 | 159,680 | 27.9 MB |
 | **TOTAL** | | | **1,127,816** | **213.4 MB** |
 
-| File name | Title on the portal | Content |
+### Documentation Fiels
+| File Name | Title on the Portal | Content |
 | --- | --- | --- |
 | senae_recaudacionesdetributoscomercioexterior_dd_2024ene.ods | SENAE_RecaudacionesDeTributosDeComercioExterior_DD_2024ENE | Data dictionary (SENAE_RECAUD_V01) |
 | senae_recaudacionesdetributosdecomercioexterior_pm_2024ene.ods | SENAE_RecaudacionesDeTributosDeComercioExterior_PM_2024ENE | Metadata file |
 
+- File Name is the name used by `02_load_raw_data.sql`.
+- Number of rows was counted on: November 8, 2026.
 
 ## Format
-(texto que escribes tú)
+- CSV has twelve columns splited by `|` with headers.
+- 2021 an 2022 are in ASCII format.
+- From 2023 to 2026 are in UTF-8 format.
+- The corrupted text (??) comes from the source, it is not a charge error.
 
 ## How to get the data
-(pasos que escribes tú)
+1. To download the six CSV fiels from the portal.
+2. Putting them into `data/raw` with the names of the `File Name` column.
+3. Execute psql from the root of the repo. Once executed `01_create_database.sql`, follow with `02_load_raw_data.sql`
 
 ## Why the data is not in the repository
-(texto que escribes tú)
+- The size of the all documents (213.4 MB) will make the repo too heavy
+- The data author is SENAE, They must be linked and not distributed
