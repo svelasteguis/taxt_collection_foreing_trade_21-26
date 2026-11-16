@@ -1,4 +1,4 @@
-# Raw data (not tracked: see data/README.md)
+# Raw data
 data/raw/*
 !data/raw/.gitkeep
 
